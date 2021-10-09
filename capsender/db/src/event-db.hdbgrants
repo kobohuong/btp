@@ -1,0 +1,10 @@
+{
+   "HDI_strg-events-db": {
+     "object_owner": {
+       "container_roles":["SRV_external_access_g#"]
+     },
+     "application_user": {
+       "container_roles":["SRV_external_access"]
+     }
+   } 
+}

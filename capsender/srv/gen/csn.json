@@ -1,0 +1,415 @@
+{
+  "definitions": {
+    "Table01": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.String"
+        },
+        "name": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "S_EVENT": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "EVENT_ID": {
+          "@title": "EVENT_ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "EVENT": {
+          "@title": "EVENT",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "KEY": {
+          "@title": "KEY",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "DELIVERED_COMPLETE": {
+          "@title": "DELIVERED_COMPLETE",
+          "type": "cds.Boolean"
+        },
+        "PRIORITY": {
+          "@title": "PRIORITY",
+          "type": "cds.String",
+          "length": 1
+        },
+        "STATUS": {
+          "@title": "STATUS",
+          "type": "cds.String",
+          "length": 5
+        },
+        "CREATION_TS": {
+          "@title": "CREATION_TS",
+          "type": "cds.Timestamp"
+        },
+        "DELIVERY_TS": {
+          "@title": "DELIVERY_TS",
+          "type": "cds.Timestamp"
+        },
+        "EARLIEST_DELIVERY_TS": {
+          "@title": "EARLIEST_DELIVERY_TS",
+          "type": "cds.Timestamp"
+        },
+        "MODIFICATION": {
+          "@title": "MODIFICATION",
+          "type": "cds.String",
+          "length": 1
+        }
+      }
+    },
+    "S_EVENT_STATUS": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "EVENT": {
+          "@title": "EVENT",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "SERVICE": {
+          "@title": "SERVICE",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "KEY": {
+          "@title": "KEY",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "STATUS": {
+          "@title": "STATUS",
+          "type": "cds.String",
+          "length": 5
+        },
+        "LAST_STATUS": {
+          "@title": "LAST_STATUS",
+          "type": "cds.String",
+          "length": 5
+        },
+        "EVENT_ID": {
+          "@title": "EVENT_ID",
+          "type": "cds.Integer"
+        },
+        "LAST_EVENT_ID": {
+          "@title": "LAST_EVENT_ID",
+          "type": "cds.Integer"
+        },
+        "DELIVERY_TS": {
+          "@title": "DELIVERY_TS",
+          "type": "cds.Timestamp"
+        },
+        "LAST_DELIVERY_TS": {
+          "@title": "LAST_DELIVERY_TS",
+          "type": "cds.Timestamp"
+        },
+        "DELIVERED": {
+          "@title": "DELIVERED",
+          "type": "cds.Boolean"
+        },
+        "LAST_DELIVERED": {
+          "@title": "LAST_DELIVERED",
+          "type": "cds.Boolean"
+        },
+        "MODIFICATION": {
+          "@title": "MODIFICATION",
+          "type": "cds.String",
+          "length": 1
+        },
+        "LAST_MODIFICATION": {
+          "@title": "LAST_MODIFICATION",
+          "type": "cds.String",
+          "length": 1
+        },
+        "ERROR_MSG": {
+          "@title": "ERROR_MSG",
+          "type": "cds.String",
+          "length": 100
+        },
+        "LAST_ERROR_MSG": {
+          "@title": "LAST_ERROR_MSG",
+          "type": "cds.String",
+          "length": 100
+        }
+      }
+    },
+    "S_EVENT_SERVICE_MAPPING": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "ID": {
+          "@title": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "EVENT": {
+          "@title": "EVENT",
+          "type": "cds.String",
+          "length": 20
+        },
+        "SERVICE": {
+          "@title": "SERVICE",
+          "type": "cds.String",
+          "length": 40
+        },
+        "STATUS": {
+          "@title": "STATUS",
+          "type": "cds.String",
+          "length": 4
+        }
+      }
+    },
+    "S_SERVICE_KAFKATOPIC_MAPPING": {
+      "kind": "entity",
+      "@cds.persistence.exists": true,
+      "elements": {
+        "ID": {
+          "@title": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "SERVICE": {
+          "@title": "SERVICE",
+          "type": "cds.String",
+          "length": 40
+        },
+        "TOPIC": {
+          "@title": "TOPIC",
+          "type": "cds.String",
+          "length": 40
+        },
+        "STATUS": {
+          "@title": "STATUS",
+          "type": "cds.String",
+          "length": 4
+        }
+      }
+    },
+    "EventService": {
+      "@source": "event-service.cds",
+      "kind": "service"
+    },
+    "EventService.Events": {
+      "kind": "entity",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "S_EVENT"
+          ]
+        }
+      },
+      "elements": {
+        "EVENT_ID": {
+          "@title": "EVENT_ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "EVENT": {
+          "@title": "EVENT",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "KEY": {
+          "@title": "KEY",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "DELIVERED_COMPLETE": {
+          "@title": "DELIVERED_COMPLETE",
+          "type": "cds.Boolean"
+        },
+        "PRIORITY": {
+          "@title": "PRIORITY",
+          "type": "cds.String",
+          "length": 1
+        },
+        "STATUS": {
+          "@title": "STATUS",
+          "type": "cds.String",
+          "length": 5
+        },
+        "CREATION_TS": {
+          "@title": "CREATION_TS",
+          "type": "cds.Timestamp"
+        },
+        "DELIVERY_TS": {
+          "@title": "DELIVERY_TS",
+          "type": "cds.Timestamp"
+        },
+        "EARLIEST_DELIVERY_TS": {
+          "@title": "EARLIEST_DELIVERY_TS",
+          "type": "cds.Timestamp"
+        },
+        "MODIFICATION": {
+          "@title": "MODIFICATION",
+          "type": "cds.String",
+          "length": 1
+        }
+      }
+    },
+    "EventService.EventServiceMappings": {
+      "kind": "entity",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "S_EVENT_SERVICE_MAPPING"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "@title": "ID",
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "EVENT": {
+          "@title": "EVENT",
+          "type": "cds.String",
+          "length": 20
+        },
+        "SERVICE": {
+          "@title": "SERVICE",
+          "type": "cds.String",
+          "length": 40
+        },
+        "STATUS": {
+          "@title": "STATUS",
+          "type": "cds.String",
+          "length": 4
+        }
+      }
+    },
+    "EventService.EventStatuses": {
+      "kind": "entity",
+      "@readonly": true,
+      "projection": {
+        "from": {
+          "ref": [
+            "S_EVENT_STATUS"
+          ]
+        }
+      },
+      "elements": {
+        "EVENT": {
+          "@title": "EVENT",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "SERVICE": {
+          "@title": "SERVICE",
+          "key": true,
+          "type": "cds.String",
+          "length": 20
+        },
+        "KEY": {
+          "@title": "KEY",
+          "key": true,
+          "type": "cds.String",
+          "length": 40
+        },
+        "STATUS": {
+          "@title": "STATUS",
+          "type": "cds.String",
+          "length": 5
+        },
+        "LAST_STATUS": {
+          "@title": "LAST_STATUS",
+          "type": "cds.String",
+          "length": 5
+        },
+        "EVENT_ID": {
+          "@title": "EVENT_ID",
+          "type": "cds.Integer"
+        },
+        "LAST_EVENT_ID": {
+          "@title": "LAST_EVENT_ID",
+          "type": "cds.Integer"
+        },
+        "DELIVERY_TS": {
+          "@title": "DELIVERY_TS",
+          "type": "cds.Timestamp"
+        },
+        "LAST_DELIVERY_TS": {
+          "@title": "LAST_DELIVERY_TS",
+          "type": "cds.Timestamp"
+        },
+        "DELIVERED": {
+          "@title": "DELIVERED",
+          "type": "cds.Boolean"
+        },
+        "LAST_DELIVERED": {
+          "@title": "LAST_DELIVERED",
+          "type": "cds.Boolean"
+        },
+        "MODIFICATION": {
+          "@title": "MODIFICATION",
+          "type": "cds.String",
+          "length": 1
+        },
+        "LAST_MODIFICATION": {
+          "@title": "LAST_MODIFICATION",
+          "type": "cds.String",
+          "length": 1
+        },
+        "ERROR_MSG": {
+          "@title": "ERROR_MSG",
+          "type": "cds.String",
+          "length": 100
+        },
+        "LAST_ERROR_MSG": {
+          "@title": "LAST_ERROR_MSG",
+          "type": "cds.String",
+          "length": 100
+        }
+      }
+    },
+    "EventService.send": {
+      "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
+    },
+    "EventService.setStatus": {
+      "kind": "action",
+      "params": {
+        "eventId": {
+          "type": "cds.Integer"
+        },
+        "status": {
+          "type": "cds.String"
+        }
+      }
+    },
+    "SenderService": {
+      "@source": "sender-service.cds",
+      "kind": "service"
+    },
+    "SenderService.send": {
+      "kind": "function",
+      "returns": {
+        "type": "cds.String"
+      }
+    }
+  },
+  "meta": {
+    "creator": "CDS Compiler v2.7.0",
+    "flavor": "inferred"
+  },
+  "$version": "2.0"
+}

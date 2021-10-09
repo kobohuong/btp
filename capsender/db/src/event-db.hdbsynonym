@@ -1,0 +1,31 @@
+{
+    "S_EVENT": {
+        "target": {
+            "object": "T_ENTITY_EVENT",
+            "schema": "STRG_EVENTS"
+        }
+    }
+    ,
+
+    "S_EVENT_SERVICE_MAPPING": {
+        "target": {
+            "object": "T_EVENT_SERVICE_MAPPING",
+            "schema": "STRG_EVENTS"
+        }
+    }
+    ,
+
+    "S_EVENT_STATUS": {
+        "target": {
+            "object": "T_ENTITY_STATUS",
+            "schema": "STRG_EVENTS"
+        }
+    }
+    ,    
+    "S_SERVICE_KAFKATOPIC_MAPPING": {
+        "target": {
+            "object": "T_SERVICE_KAFKATOPIC_MAPPING",
+            "schema": "STRG_EVENTS"
+        }
+    }
+}

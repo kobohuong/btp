@@ -1,0 +1,70 @@
+{
+    "name": "svc-event-reactor",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    
+    "dependencies": {
+        "@sap/cds": "^5",
+        "express": "^4",
+        "hdb": "^0.18.3"
+    },
+    "scripts": {
+        "dbbuild": "cds build && cd ./db && npm start",
+        "userbuild": "cds build && cd ./user_db && npm start",
+        "srv": "cds build && cd ./srv && npm start",
+        "env": "cd db && hana-cli copy2DefaultEnv && cp ./default-env.json ../default-env.json && cp ./default-env.json ../srv/default-env.json",
+        "build": "cds build",
+        "start": "cds run",
+        "watch": "cds watch",
+        "mocha": "npx mocha || echo",
+        "jest": "npx jest --verbose",
+        "test": "npm run jest -s"
+    },
+    "cds": {
+        "requires": {
+            "messaging": {
+                "kind": "enterprise-messaging",
+                             "credentials": {       
+
+               "namespace": "barmer/em/dev"    
+
+                 } ,
+                "type": {}
+            },
+            "db": {
+                "kind": "hana"
+            }
+        },
+        "hana": {
+            "deploy-format": "hdbtable"
+        },
+        "build": {
+            "target": ".",
+            "tasks": [
+                {
+                    "src": "db",
+                    "for": "hana",
+                    "options": {
+                        "model": [
+                            "db",
+                            "srv"
+                        ]
+                    }
+                },
+                {
+                    "src": "srv",
+                    "for": "node-cf",
+                    "options": {
+                        "model": [
+                            "db",
+                            "srv"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
