@@ -1,0 +1,9 @@
+@server = http://localhost:4004
+@me = Authorization: Basic {{$processEnv USER}}:
+
+
+POST {{server}}/kafka-producer/callKafka
+Content-Type: application/json
+{{me}}
+
+{ "id":"1", "payload": "my big payload" }
