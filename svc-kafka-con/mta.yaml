@@ -24,18 +24,13 @@ modules:
    path: srv
    parameters:
      buildpack: java_buildpack
-     memory: 256MB
-     disk-quota: 1G
-     instances: 1
-     health-check-type: http
-     health-check-http-endpoint: "/"
-     healtch-check-timeout: 180
      stack: cflinuxfs3
      enable-ssh: true
 
    properties:
      SPRING_PROFILES_ACTIVE: cloud
    build-parameters:
+     ignore: [".*/","*default-env.json*", "./db/*.env*", "/node_modules", "./db/node_modules", "./app"] 
      builder: custom
      commands: [ mvn clean package ]
      build-result: "target/*-exec.[wj]ar"

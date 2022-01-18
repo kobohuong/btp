@@ -6,6 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@luminati-io/socksv5": "^0.0.7",
     "@sap/cds": "^5",
     "express": "^4",
     "hdb": "^0.18.3"
