@@ -1,28 +1,19 @@
 package customer.btp;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Proxy;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketImpl;
-import java.net.UnknownHostException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
- 
 import java.util.Base64; // or any other library for base64 encoding
+
 import org.json.JSONArray; // or any other library for JSON objects
-import org.json.JSONObject; // or any other library for JSON objects
 import org.json.JSONException; // or any other library for JSON objects
+import org.json.JSONObject; // or any other library for JSON objects
  
 public class ConnectivitySocks5ProxySocket extends Socket {
  

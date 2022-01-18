@@ -35,7 +35,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
+			
 			<!-- SPRING BOOT -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
@@ -44,6 +44,25 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<!-- JWT Client-->
+			<dependency>
+				<groupId>com.sap.cloud.security.xsuaa</groupId>
+				<artifactId>token-client</artifactId>
+				<version>2.11.11</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sap.cloud.security.xsuaa</groupId>
+				<artifactId>token-client</artifactId>
+				<version>2.11.11</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+			</dependency>
+			<dependency> <!-- required when using Spring Web `RestTemplate` with X.509 authentication method-->
+			  <groupId>org.apache.httpcomponents</groupId>
+			  <artifactId>httpclient</artifactId>
+			</dependency>						
 		</dependencies>
 	</dependencyManagement>
 
