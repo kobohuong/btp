@@ -33,13 +33,12 @@ modules:
     requires:
       - name: destination
       - name: connectivity
+      - name: xsuaa
 resources:
   - name: destination
-    type: org.cloud.foundry.managed-service
+    type: org.cloudfoundry.managed-service
     parameters:
       service: destination
-      service-keys:
-        - name: default
       service-name: btp-destination
       service-plan: lite
       optional: false
@@ -50,3 +49,9 @@ resources:
       service-name: Conn_ESCP1
       service: connectivity
       service-plan: lite
+  - name: xsuaa
+    type: com.sap.xs.uaa
+    parameters:
+      service: xsuaa
+      service-name: btp-xsuaa
+      service-plan: broker

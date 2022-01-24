@@ -3,7 +3,7 @@ const process = require('process')
 
 const kafkaHost = process.env.CF_APP_KAFKA_HOST
 const kafkaPort = process.env.CF_APP_KAKF_PORT
-const proxyHost = "connectivityproxy.internal.cf.eu10.hana.ondemand.com"
+const proxyHost = "connectivityproxy.internal.cf.us10.hana.ondemand.com"
 const proxyPort = 20004
 const kafkaBrokers=["kafka:9092"]
 
@@ -120,8 +120,8 @@ const asyncInitialRunFn = async () => {
 				// Establish a SOCKS5 handshake for TCP connection via connectivity service and Cloud Connector
 				socks.connect(
 					{
-						host: 'kafka-e-broker01',
-						port: 9094,
+						host:  'kafka', //'kafka-e-broker01',
+						port:   9092,//9094,
 						proxyHost: connService.onpremise_proxy_host,
 						proxyPort: parseInt(
 							connService.onpremise_socks5_proxy_port,
@@ -264,13 +264,13 @@ const asyncInitialRunFn = async () => {
 };
 
 // Ping - Pong Health
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
 
-app.get('/ping', function (req, res) {
-	res.send('pong');
-});
+// app.get('/ping', function (req, res) {
+// 	res.send('pong');
+// });
 
-app.listen(8080);
+// app.listen(8080);
 
 module.exports = { KafkaService }

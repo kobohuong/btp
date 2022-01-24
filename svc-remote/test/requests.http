@@ -1,4 +1,4 @@
-@server = http://localhost:4004
+@server = https://f35cf986trial-sa-wpt-dom-dev-svc-remote-srv.cfapps.us10.hana.ondemand.com
 @me = Authorization: Basic {{$processEnv USER}}:
 
 
