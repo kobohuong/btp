@@ -1,4 +1,4 @@
-var socks = require('socksv5');
+var socks = require('@luminati-io/socksv5');
  
 var srv = socks.createServer(function(info, accept, deny) {
   accept();

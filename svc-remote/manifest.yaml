@@ -1,0 +1,12 @@
+applications:
+    - name: svc-remote-srv
+      disk_quota: 1G
+      
+      buildpacks:
+        - nodejs_buildpack
+      instances: 1
+      memory: 512M
+      services:
+        - Conn_ESCP1
+        - btp-xsuaa
+        - btp-destination

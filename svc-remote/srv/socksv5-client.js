@@ -7,7 +7,7 @@ var client = socks.connect({
   proxyPort: 1080,
   auths: [ socks.auth.None() ]
 }, async function(socket) {
-   await workWithKafka(socket)
+    workWithKafka(socket)
   console.log('>> Connection successful');
   socket.write('GET /node.js/rules HTTP/1.0\r\n\r\n');
   socket.pipe(process.stdout);
