@@ -1,9 +1,12 @@
+
 @server = https://f35cf986trial-sa-wpt-dom-dev-svc-remote-srv.cfapps.us10.hana.ondemand.com
+@server = barmer-entwicklung-barmer-escp1-svc-remote-srv.cfapps.eu10.hana.ondemand.com
+//@server = http://localhost:4004
 @me = Authorization: Basic {{$processEnv USER}}:
 
 
 POST {{server}}/kafka-producer/send
 Content-Type: application/json
-{{me}}
+//{{me}}
 
 { "payload": "my big payload" }

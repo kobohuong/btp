@@ -1,34 +1,42 @@
 const cds = require('@sap/cds')
 const process = require('process')
+const fs = require('fs')
 
-const kafkaHost = process.env.CF_APP_KAFKA_HOST
-const kafkaPort = process.env.CF_APP_KAKF_PORT
-const proxyHost = "connectivityproxy.internal.cf.us10.hana.ondemand.com"
-const proxyPort = 20004
-const kafkaBrokers=["kafka:9092"]
+const log = cds.log("svc-remote-srv")
+cds.env.log.levels = { app: 'debug', db: 'debug' }
+//const logging = require('@sap/logging')
+
+//const appContext = logging.createAppContext();
+
+//let log = appContext.getLogger('/home/vcap/logs'); 
+
+//const kafkaHost = process.env.CF_APP_KAFKA_HOST
+//const kafkaPort = process.env.CF_APP_KAKF_PORT
+//const proxyHost = "connectivityproxy.internal.cf.us10.hana.ondemand.com"
+//const proxyPort = 20004
+//const kafkaBrokers = ["kafka:9092"]
 
 // Logging information
-const log = require('cf-nodejs-logging-support');
-log.setLoggingLevel('info');
+//const log = require('cf-nodejs-logging-support');
+//const log = cds.log('svc-remote-srv')
+//log.setLoggingLevel('info');
 
 
 class KafkaClient {
-    constructor(host, port, proxyHost, proxyPort, kafkaBrokers) {
-        log.info("KafkaClient: constructor()")
-        this.host = host
-        this.port = port
-        this.proxyHost = proxyHost
-        this.proxyPort = proxyPort
-        this.kafkaBrokers = kafkaBrokers    
+    init() {
+        asyncInitialRunFn()
     }
-
+  
+    constructor() {
+        log.info("KafkaClient: constructor()")
+        this.init()
+    }
     send(topic, payload) {
         log.info("send()")
         log.debug("topic: ", topic, "payload:", payload)        
     }
 
     connect() {
-        asyncInitialRunFn();
         log.info("connect")
     }        
 }
@@ -39,9 +47,8 @@ class KafkaService extends cds.ApplicationService { init() {
         const { payload} = req.data
 
         log.debug("Payload:", payload);
-        const kkClient = new KafkaClient(kafkaHost, kafkaPort, proxyHost, proxyPort, kafkaBrokers)
-        kkClient.connect()
-        const topic = "test-topic"
+        const kkClient = new KafkaClient()
+        const topic = "test-topic"        
         kkClient.send(topic, payload)
 
         return {  "message":"sent" }
@@ -73,11 +80,11 @@ String.prototype.getBytes = function () {
 	return bytes;
 };
 
-console.log(process.env.destinations);
+log.debug(process.env.destinations);
 //const serviceURL = process.env.destinations[0].url;
 const asyncInitialRunFn = async () => {
 
-
+    log.info("asyncInitialRunFn()")
 	const socketAliveTime = 60 * 60 * 1000;
 
 	var socks = require('@luminati-io/socksv5');
@@ -85,7 +92,8 @@ const asyncInitialRunFn = async () => {
 	const _getTokenForDestinationService = function () {
 		return new Promise((resolve, reject) => {
 			let tokenEndpoint = connService.token_service_url + '/oauth/token';
-			const client = new oauthClient({
+			log.info("TokenEndpoint: " + tokenEndpoint)
+            const client = new oauthClient({
 				authorizationUri:
 					connService.token_service_url + '/oauth/authorize',
 				accessTokenUri: tokenEndpoint,
@@ -104,6 +112,7 @@ const asyncInitialRunFn = async () => {
 					});
 				})
 				.then((result) => {
+                    
 					resolve(result.data.access_token);
 				});
 		});
@@ -116,12 +125,12 @@ const asyncInitialRunFn = async () => {
 					STATE_RESPONSE = 1,
 					STATE_2VERSION = 2,
 					STATE_STATUS = 3;
-
+                log.info("jwtToken: " + jwtToken)    
 				// Establish a SOCKS5 handshake for TCP connection via connectivity service and Cloud Connector
 				socks.connect(
 					{
-						host:  'kafka', //'kafka-e-broker01',
-						port:   9092,//9094,
+						host:  'kafka-e-broker01',
+						port:   9094,
 						proxyHost: connService.onpremise_proxy_host,
 						proxyPort: parseInt(
 							connService.onpremise_socks5_proxy_port,
@@ -133,10 +142,12 @@ const asyncInitialRunFn = async () => {
 							{
 								METHOD: 0x80,
 								client: function clientHandler(stream, cb) {
-									console.log('BEGIN AUTH');
+                                    log.info("BEGIN AUTH")
 									var state = STATE_2VERSION;
 
 									function onData(chunk) {
+                                        log.info("onData()")
+                                        log.info("Chunk: ", chunk)
 										var i = 0,
 											len = chunk.length;
 
@@ -173,7 +184,8 @@ const asyncInitialRunFn = async () => {
 											}
 										}
 									}
-									stream.on('data', onData);
+                                    log.info("After while ")
+                                    stream.on('data', onData);
 
 									// === Authenticate ==
 									// Send the following bytes
@@ -192,22 +204,31 @@ const asyncInitialRunFn = async () => {
 									pos = buf.writeInt32BE(len, pos);
 									pos = buf.write(jwtToken, pos);
 									pos += 5;
+                                    //cloud connector locationid
+                                    //pos = buf.writeInt32BE(12, pos);
+                                    //pos = buf.write('DEV_bConnect', pos);                                                                            
 									buf[pos] = 0x00;
-
+                                    log.info("Pos: ", pos)
+                                    log.info("Buf: ", buf)        
 									stream.write(buf);
+                                    log.info("END AUTH ")
+
 								}
 							}
 						]
 					},
 					function (socket) {
+                        log.info(socket)
 						startKafka(socket);
 					}
 				);
 			})
 			.catch((err) => {});
 
-		async function startKafka(socket) {
+		function startKafka(socket) {
+            log.info("startKafka")
 			var myCustomSocketFactory = ({ host, port, ssl, onConnect }) => {
+                log.debug("create customSocketFactory")
 				socket.setKeepAlive(true, socketAliveTime);
 				onConnect();
 				return socket;
@@ -224,27 +245,31 @@ const asyncInitialRunFn = async () => {
 					initialRetryTime: 5000,
 					retries: 2
 				},
+                ssl: {
+                    ca : fs.readFileSync("amazon.crt")
+                },
 				requestTimeout: 30000,
 				authenticationTimeout: 7000,
 				socketFactory: myCustomSocketFactory,
 				logLevel: logLevel.ERROR
 			});
 
-         
+
+
               const producer = kafka.producer();
           
               const run = async () => {
                 // Producing
                 await producer.connect();
                 await producer.send({
-                  topic: topic,
+                  topic:  "tes-topic",
                   messages: [
                     {
                       value: "test payload",
                     },
                   ],
                 });
-                console.log("Message is sent to kafka server");
+                log.debug("Message is sent to kafka server")
               };
           
               run().catch(console.error);                      
@@ -260,7 +285,6 @@ const asyncInitialRunFn = async () => {
 		}, socketAliveTime);
 	}, 1000);
 
-	console.log('async start');
 };
 
 // Ping - Pong Health

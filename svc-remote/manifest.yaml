@@ -7,6 +7,6 @@ applications:
       instances: 1
       memory: 512M
       services:
-        - Conn_ESCP1
-        - btp-xsuaa
+        - Con_ESCP1
+        - btp-uaa
         - btp-destination

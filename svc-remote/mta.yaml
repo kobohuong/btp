@@ -4,7 +4,9 @@ version: 1.0.0
 description: A simple CAP project.
 parameters:
   enable-parallel-deployments: true
-build-parameters:
+  stack: cflinuxfs3
+  enable-ssh: true
+  build-parameters: null
   before-all:
     - builder: custom
       commands:
@@ -34,6 +36,7 @@ modules:
       - name: destination
       - name: connectivity
       - name: xsuaa
+      - name: logs
 resources:
   - name: destination
     type: org.cloudfoundry.managed-service
@@ -46,12 +49,17 @@ resources:
   - name: connectivity
     type: org.cloudfoundry.managed-service
     parameters:
-      service-name: Conn_ESCP1
+      service-name: Con_ESCP1
       service: connectivity
       service-plan: lite
   - name: xsuaa
     type: com.sap.xs.uaa
     parameters:
       service: xsuaa
-      service-name: btp-xsuaa
-      service-plan: broker
+      service-name: btp-uaa
+      service-plan: application
+  - name: logs
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: application-logs
+      service-plan: lite
